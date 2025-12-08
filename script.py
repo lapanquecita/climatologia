@@ -15,7 +15,7 @@ PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "noviembre 2025"
+FECHA_FUENTE = "diciembre 2025"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES = {

@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 import tabula
 
+
 # En los archivos PDF cada columna tiene el nombre del mes.
 # Este diccionario nos ayuda a asignarle su número.
 MESES = {
