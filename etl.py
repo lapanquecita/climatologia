@@ -87,7 +87,7 @@ def descargar():
     url_base = "https://smn.conagua.gob.mx/tools/DATA/Climatolog%C3%ADa/Pron%C3%B3stico%20clim%C3%A1tico/Temperatura%20y%20Lluvia/{}/{}.pdf"
 
     # Iteramos sobre cada año y tipo.
-    for i in range(1985, 2026):
+    for i in range(1985, 2027):
         for tipo in tipos:
             # Preparamos la URL final con los parámetros de la iteración.
             url_final = url_base.format(tipo, i)
@@ -129,7 +129,7 @@ def combinar():
     dfs = list()
 
     # En lugar de iterar por archivo, iteraremos por año.
-    for i in range(1985, 2026):
+    for i in range(1985, 2027):
         # Cargamos el archivo de temperatura media.
         df1 = pd.read_csv(f"./csv/{i}_TMED.csv", index_col=0)
 
