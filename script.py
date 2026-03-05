@@ -15,7 +15,7 @@ PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "febrero 2026"
+FECHA_FUENTE = "marzo 2026"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES = {
@@ -52,11 +52,11 @@ def temperatura(entidad_id, tipo):
     # Estos serán los años que mostraremos.
     # Es recomendable que cada uno tenga un color distinto.
     años = {
-        1985: "#90caf9",
-        1995: "#8bc34a",
-        2005: "#ffd54f",
-        2015: "#ffa726",
-        2025: "#ef5350",
+        1986: "#90caf9",
+        1996: "#8bc34a",
+        2006: "#ffd54f",
+        2016: "#ffa726",
+        2026: "#ef5350",
     }
 
     # Cargamos el archivo de temperatura y precipitación.
