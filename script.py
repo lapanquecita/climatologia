@@ -7,7 +7,8 @@ las tendencias a largo plazo de la temperatura y precipitación.
 
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.colors import qualitative
+from plotly.subplots import make_subplots
+from statsmodels.tsa.seasonal import STL
 
 
 # Estos serán los colores usados para todas las visualizaciones.
@@ -116,7 +117,6 @@ def temperatura(entidad_id, tipo):
     )
 
     fig.update_layout(
-        colorway=qualitative.Pastel[1:],
         showlegend=True,
         legend_itemsizing="constant",
         legend_borderwidth=1,
@@ -189,7 +189,9 @@ def tabla_temperatura():
     maximas = df.groupby("CVE_ENT")["MAXIMA"].idxmax()
     maximas = df.loc[maximas]
     maximas["texto"] = maximas.apply(
-        lambda x: f"{MESES[x['PERIODO'].month]}, {x['PERIODO'].year} ({x['MAXIMA']} °C)",
+        lambda x: (
+            f"{MESES[x['PERIODO'].month]}, {x['PERIODO'].year} ({x['MAXIMA']} °C)"
+        ),
         axis=1,
     )
 
@@ -197,7 +199,9 @@ def tabla_temperatura():
     minimas = df.groupby("CVE_ENT")["MINIMA"].idxmin()
     minimas = df.loc[minimas]
     minimas["texto"] = minimas.apply(
-        lambda x: f"{MESES[x['PERIODO'].month]}, {x['PERIODO'].year} ({x['MINIMA']} °C)",
+        lambda x: (
+            f"{MESES[x['PERIODO'].month]}, {x['PERIODO'].year} ({x['MINIMA']} °C)"
+        ),
         axis=1,
     )
 
@@ -269,6 +273,224 @@ def tabla_temperatura():
     )
 
     fig.write_image("./tabla.png")
+
+
+def invierno(entidad_id):
+    """
+    Genera una gráfica mostrando la evolución de
+    temperaturas durante el invierno meteorológico.
+
+    Parameters
+    ----------
+    entidad_id : int
+        La clave de la entidad. 0 para cifras a nivel nacional.
+
+    """
+
+    # Cargamos el archivo de temperatura y precipitación.
+    df = pd.read_csv("./data.csv", parse_dates=["PERIODO"], index_col=0)
+
+    # Seleccionamos los registros de la entidad especificada.
+    df = df[df["CVE_ENT"] == entidad_id]
+
+    # Extraemos el nombre de la entidad.
+    entidad = df["ENTIDAD"].iloc[0]
+
+    # Solo seleccionamos enero, febrero y diciembre.
+    df = df[df.index.month.isin([12, 1, 2])]
+
+    # El diciembre de cada año corresponde al siguiente invierno.
+    # Por ejemplo: diciembre de 2025 pertenece al invierno de 2026.
+    # Con la siguiente línea arreglamos ese detalle.
+    df["Año"] = df.index.map(lambda x: x.year + 1 if x.month == 12 else x.year)
+
+    # Calculamos el promedio invernal.
+    df = df.groupby("Año").mean(numeric_only=True)
+
+    # Esta gráfica estará compuesta de 3 gráficas independientes.
+    # Una para las temperaturas máximas, medias y mínimas.
+    # Cada una estará acompañada de una línea de tendencia.
+    fig = make_subplots(
+        rows=3,
+        cols=1,
+        shared_xaxes=True,
+        vertical_spacing=0.05,
+        subplot_titles=[
+            "Temperatura máxima (promedio estacional)",
+            "Temperatura media (promedio estacional)",
+            "Temperatura mínima (promedio estacional)",
+        ],
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["MAXIMA"],
+            mode="markers",
+            marker_color="#e57373",
+            marker_size=24,
+            showlegend=False,
+        ),
+        row=1,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=STL(df["MAXIMA"], 5).fit().trend,
+            mode="lines",
+            line_color="#FFFFFF",
+            line_width=5,
+            name="Tendencia (5 años)",
+            legend="legend1",
+        ),
+        row=1,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["MEDIA"],
+            mode="markers",
+            marker_color="#ffc107",
+            marker_size=24,
+            showlegend=False,
+        ),
+        row=2,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=STL(df["MEDIA"], 5).fit().trend,
+            mode="lines",
+            line_color="#FFFFFF",
+            line_width=5,
+            name="Tendencia (5 años)",
+            legend="legend2",
+        ),
+        row=2,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["MINIMA"],
+            mode="markers",
+            marker_color="#64b5f6",
+            marker_size=24,
+            showlegend=False,
+        ),
+        row=3,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=STL(df["MINIMA"], 5).fit().trend,
+            mode="lines",
+            line_color="#FFFFFF",
+            line_width=5,
+            name="Tendencia (5 años)",
+            legend="legend3",
+        ),
+        row=3,
+        col=1,
+    )
+
+    fig.update_xaxes(
+        ticks="outside",
+        ticklen=10,
+        tickcolor="#FFFFFF",
+        linewidth=2,
+        gridwidth=0.5,
+        showline=True,
+        mirror=True,
+        nticks=15,
+    )
+
+    fig.update_yaxes(
+        title="Temperatura (°C)",
+        ticks="outside",
+        ticklen=10,
+        title_standoff=15,
+        tickcolor="#FFFFFF",
+        linewidth=2,
+        gridwidth=0.5,
+        showline=True,
+        mirror=True,
+        nticks=20,
+    )
+
+    for item in fig.layout.annotations:
+        item["font"]["size"] = 36
+        item["y"] += 0.01
+
+    fig.add_annotation(
+        x=0.01,
+        y=-0.055,
+        xref="paper",
+        yref="paper",
+        xanchor="left",
+        yanchor="top",
+        text=f"Fuente: SMN ({FECHA_FUENTE})",
+    )
+
+    fig.add_annotation(
+        x=0.5,
+        y=-0.055,
+        xref="paper",
+        yref="paper",
+        xanchor="center",
+        yanchor="top",
+        text="Temporada invernal (diciembre—febrero)",
+    )
+
+    fig.add_annotation(
+        x=1.01,
+        y=-0.055,
+        xref="paper",
+        yref="paper",
+        xanchor="right",
+        yanchor="top",
+        text="🧁 @lapanquecita",
+    )
+
+    fig.update_layout(
+        showlegend=True,
+        legend1=dict(
+            x=0.02, y=0.98, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+        ),
+        legend2=dict(
+            x=0.02, y=0.62, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+        ),
+        legend3=dict(
+            x=0.02, y=0.26, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+        ),
+        width=1920,
+        height=2400,
+        font_family="Inter",
+        font_color="#FFFFFF",
+        font_size=24,
+        title_text=f"Evolución de las temperaturas invernales en <b>{entidad.replace('Nacional', 'México')}</b> ({df.index.min()}-{df.index.max()})",
+        title_x=0.5,
+        title_y=0.98,
+        margin_t=200,
+        margin_l=140,
+        margin_r=40,
+        margin_b=140,
+        title_font_size=42,
+        plot_bgcolor=PLOT_COLOR,
+        paper_bgcolor=PLOT_COLOR,
+    )
+
+    # Nombramos el archivo resultante con los parámetros de la función.
+    fig.write_image(f"./invierno_{entidad_id}.png")
 
 
 def precipitacion_anual(entidad_id):
@@ -559,6 +781,7 @@ def top_lluvia(entidad_id):
 if __name__ == "__main__":
     temperatura(0, "MEDIA")
     tabla_temperatura()
+    invierno(0)
 
     precipitacion_anual(0)
     top_lluvia(0)

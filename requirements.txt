@@ -3,3 +3,4 @@ plotly
 kaleido
 requests
 tabula-py
+statsmodels

@@ -49,6 +49,16 @@ Tabla comparativa con los meses más fríos y más cálidos registrados en cada 
 
 ![Top meses](./imgs/tabla.png)
 
+### Temperatura invernal
+
+Visualización de la evolución del invierno meteorológico (diciembre, enero y febrero) para una entidad federativa específica.
+
+La gráfica se compone de tres subgráficas que muestran la temperatura mínima, media y máxima registradas durante el periodo analizado.
+
+Cada una incluye líneas de tendencia, lo que permite identificar cambios graduales en el comportamiento de la temperatura invernal a lo largo del tiempo.
+
+![Invnierno](./imgs/invierno_0.png)
+
 ### Precipitación anual acumulada
 
 Visualización de la precipitación total anual, acompañada de una línea de referencia con la mediana histórica para proporcionar contexto.
