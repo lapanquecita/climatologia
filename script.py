@@ -249,7 +249,7 @@ def tabla_temperatura():
         title_x=0.5,
         title_y=0.95,
         title_font_size=40,
-        title_text="Las temperaturas más bajas y altas en México<br>por entidad y mes de registro (1985-2025)",
+        title_text="Las temperaturas más bajas y altas en México<br>por entidad y mes de registro (1985-2026)",
         paper_bgcolor=PAPER_COLOR,
         annotations=[
             dict(
@@ -719,7 +719,7 @@ def top_lluvia(entidad_id):
         font_family="Inter",
         font_color="#FFFFFF",
         font_size=24,
-        title_text=f"Los 20 meses más lluviosos en <b>{entidad.replace('Nacional', 'México')}</b> entre 1985 y 2025",
+        title_text=f"Los 20 meses más lluviosos en <b>{entidad.replace('Nacional', 'México')}</b> entre 1985 y 2026",
         title_x=0.5,
         title_y=0.965,
         margin_t=80,
