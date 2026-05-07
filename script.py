@@ -8,7 +8,7 @@ las tendencias a largo plazo de la temperatura y precipitación.
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from statsmodels.tsa.seasonal import STL
+from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
 # Estos serán los colores usados para todas las visualizaciones.
@@ -16,7 +16,7 @@ PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "abril 2026"
+FECHA_FUENTE = "mayo 2026"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES = {
@@ -338,11 +338,11 @@ def invierno(entidad_id):
     fig.add_trace(
         go.Scatter(
             x=df.index,
-            y=STL(df["MAXIMA"], 5).fit().trend,
+            y=lowess(df["MAXIMA"], df.index, frac=0.25, return_sorted=False),
             mode="lines",
             line_color="#FFFFFF",
             line_width=5,
-            name="Tendencia (5 años)",
+            name="Tendencia (LOWESS)",
             legend="legend1",
         ),
         row=1,
@@ -365,11 +365,11 @@ def invierno(entidad_id):
     fig.add_trace(
         go.Scatter(
             x=df.index,
-            y=STL(df["MEDIA"], 5).fit().trend,
+            y=lowess(df["MEDIA"], df.index, frac=0.25, return_sorted=False),
             mode="lines",
             line_color="#FFFFFF",
             line_width=5,
-            name="Tendencia (5 años)",
+            name="Tendencia (LOWESS)",
             legend="legend2",
         ),
         row=2,
@@ -392,11 +392,11 @@ def invierno(entidad_id):
     fig.add_trace(
         go.Scatter(
             x=df.index,
-            y=STL(df["MINIMA"], 5).fit().trend,
+            y=lowess(df["MINIMA"], df.index, frac=0.25, return_sorted=False),
             mode="lines",
             line_color="#FFFFFF",
             line_width=5,
-            name="Tendencia (5 años)",
+            name="Tendencia (LOWESS)",
             legend="legend3",
         ),
         row=3,
