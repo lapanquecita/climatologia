@@ -74,7 +74,7 @@ Incluye una tabla de referencia con las medianas históricas correspondientes a 
 
 Al igual que las gráficas de temperatura, esta vista puede filtrarse a nivel nacional o estatal.
 
-![Top precipitación](./imgs/top_precipitacion_Nacional.png)
+![Top precipitación](./imgs/top_precipitacion_0.png)
 
 ## Conclusión
 
