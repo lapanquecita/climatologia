@@ -16,7 +16,7 @@ PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "mayo 2026"
+FECHA_FUENTE = "junio 2026"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES_ABREVIADOS = {
@@ -1014,7 +1014,7 @@ if __name__ == "__main__":
     temperatura(0, "MEDIA")
     tabla_temperatura()
     invierno(0)
-    # mensual(9, 4)
+    mensual(9, 4)
 
     precipitacion_anual(0)
     top_lluvia(0)
