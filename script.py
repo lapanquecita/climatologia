@@ -16,7 +16,7 @@ PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "junio 2026"
+FECHA_FUENTE = "julio 2026"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES_ABREVIADOS = {
@@ -111,7 +111,8 @@ def temperatura(entidad_id, tipo):
         ticktext=list(MESES_ABREVIADOS.values()),
         ticks="outside",
         ticklen=10,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -124,7 +125,8 @@ def temperatura(entidad_id, tipo):
         ticks="outside",
         ticklen=10,
         title_standoff=15,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -138,7 +140,7 @@ def temperatura(entidad_id, tipo):
         legend_borderwidth=1,
         legend_title="<b>Año</b>",
         legend_title_side="top center",
-        legend_bordercolor="#FFFFFF",
+        legend_bordercolor="#EEEEEE",
         legend_xanchor="left",
         legend_yanchor="top",
         legend_x=0.01,
@@ -420,7 +422,8 @@ def mensual(entidad_id, mes_id):
     fig.update_xaxes(
         ticks="outside",
         ticklen=10,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -433,7 +436,8 @@ def mensual(entidad_id, mes_id):
         ticks="outside",
         ticklen=10,
         title_standoff=15,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -478,13 +482,13 @@ def mensual(entidad_id, mes_id):
     fig.update_layout(
         showlegend=True,
         legend1=dict(
-            x=0.02, y=0.98, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.98, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         legend2=dict(
-            x=0.02, y=0.62, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.62, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         legend3=dict(
-            x=0.02, y=0.26, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.26, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         width=1920,
         height=2400,
@@ -638,7 +642,8 @@ def invierno(entidad_id):
     fig.update_xaxes(
         ticks="outside",
         ticklen=10,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -651,7 +656,8 @@ def invierno(entidad_id):
         ticks="outside",
         ticklen=10,
         title_standoff=15,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -696,13 +702,13 @@ def invierno(entidad_id):
     fig.update_layout(
         showlegend=True,
         legend1=dict(
-            x=0.02, y=0.98, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.98, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         legend2=dict(
-            x=0.02, y=0.62, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.62, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         legend3=dict(
-            x=0.02, y=0.26, borderwidth=1.25, bordercolor="#FFFFFF", bgcolor=PLOT_COLOR
+            x=0.02, y=0.26, borderwidth=1.25, bordercolor="#EEEEEE", bgcolor=PLOT_COLOR
         ),
         width=1920,
         height=2400,
@@ -776,7 +782,8 @@ def precipitacion_anual(entidad_id):
         ticks="outside",
         ticklen=10,
         zeroline=False,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         showline=True,
         showgrid=True,
@@ -792,7 +799,8 @@ def precipitacion_anual(entidad_id):
         separatethousands=True,
         ticklen=10,
         title_standoff=15,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
@@ -921,7 +929,8 @@ def top_lluvia(entidad_id):
         ticks="outside",
         ticklen=10,
         zeroline=False,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         showline=True,
         showgrid=True,
@@ -935,7 +944,8 @@ def top_lluvia(entidad_id):
         separatethousands=True,
         ticklen=10,
         title_standoff=15,
-        tickcolor="#FFFFFF",
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
         linewidth=2,
         gridwidth=0.5,
         showline=True,
