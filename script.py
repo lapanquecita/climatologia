@@ -11,12 +11,13 @@ from plotly.subplots import make_subplots
 from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
+# Este será el texto mostrado en cada anotación de fuente.
+FECHA_FUENTE = "agosto 2026"
+
 # Estos serán los colores usados para todas las visualizaciones.
 PAPER_COLOR = "#002222"
 PLOT_COLOR = "#001414"
 
-# Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "julio 2026"
 
 # Este diccionario nos ayudará a darle formato a los meses.
 MESES_ABREVIADOS = {
@@ -768,7 +769,7 @@ def precipitacion_anual(entidad_id):
             x=df.index,
             y=df["PRECIPITACION"],
             marker_line_width=0,
-            marker_color="#ff6d00",
+            marker_color="#ff3d00",
         )
     )
 
@@ -833,7 +834,7 @@ def precipitacion_anual(entidad_id):
                 xref="paper",
                 xanchor="center",
                 yanchor="top",
-                text=f"<b>Mediana histórica ({mediana} mm)</b>",
+                text=f"<b>Mediana histórica ({mediana:,.1f} mm)</b>",
             ),
             dict(
                 x=0.01,
