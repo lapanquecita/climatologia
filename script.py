@@ -12,7 +12,7 @@ from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "agosto 2026"
+FECHA_FUENTE = "septiembre 2026"
 
 # Estos serán los colores usados para todas las visualizaciones.
 PAPER_COLOR = "#002222"
