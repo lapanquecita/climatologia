@@ -180,21 +180,20 @@ def combinar():
 
     # Reseteamos el índice, ya que la columna de la fecha
     # la vamos a necesitar para ordenar el DataFrame.
-    final.reset_index(inplace=True)
+    final = final.reset_index()
 
     # Agregamos la clave de cada entidad.
     final["CVE_ENT"] = final["ENTIDAD"].map(ENTIDADES_INVERTIDO)
 
     # Renombramos las columnas.
-    final.rename(
+    final = final.rename(
         columns={
             "index": "PERIODO",
             "TMED": "MEDIA",
             "TMIN": "MINIMA",
             "TMAX": "MAXIMA",
             "PREC": "PRECIPITACION",
-        },
-        inplace=True,
+        }
     )
 
     # Ordenamos las columnas.
@@ -203,7 +202,7 @@ def combinar():
     ]
 
     # Ordenamos el DataFrame usando todas las columnas.
-    final.sort_values(list(final.columns), inplace=True)
+    final = final.sort_values(list(final.columns))
 
     # Quitamos los valores nulos, ya que son de meses que aún no ocurren.
     final = final.dropna(axis=0)

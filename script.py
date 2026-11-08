@@ -5,6 +5,7 @@ las tendencias a largo plazo de la temperatura y precipitación.
 
 """
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -12,7 +13,7 @@ from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
 # Este será el texto mostrado en cada anotación de fuente.
-FECHA_FUENTE = "octubre 2026"
+FECHA_FUENTE = "noviembre 2026"
 
 # Estos serán los colores usados para todas las visualizaciones.
 PAPER_COLOR = "#002222"
@@ -118,7 +119,6 @@ def temperatura(entidad_id, tipo):
         gridwidth=0.5,
         showline=True,
         mirror=True,
-        nticks=15,
     )
 
     fig.update_yaxes(
@@ -774,9 +774,7 @@ def precipitacion_anual(entidad_id):
     )
 
     # Agregamos la línea de la mediana histórica.
-    fig.add_shape(
-        x0=1980, x1=2030, y0=mediana, y1=mediana, line_width=4, line_color="#FFFFFF"
-    )
+    fig.add_hline(mediana, line_width=4, line_color="#FFFFFF")
 
     fig.update_xaxes(
         range=[df.index.min() - 0.5, df.index.max() + 0.5],
@@ -906,7 +904,7 @@ def top_lluvia(entidad_id):
     tabla = "<br>".join(tabla)
 
     # Ordenamos el DataFrame por precipitación y tomamos los 20 registros más altos.
-    df.sort_values("PRECIPITACION", inplace=True)
+    df = df.sort_values("PRECIPITACION")
     df = df.tail(20)
 
     # Le damos formato al índice.
@@ -1021,6 +1019,176 @@ def top_lluvia(entidad_id):
     fig.write_image(f"./top_precipitacion_{entidad_id}.png")
 
 
+def precipitacion_mensual(entidad_id):
+    """
+    Genera un mapa de calor mostrando la precipitación
+    mensual acumulada para la entidad especificada.
+
+    Parameters
+    ----------
+    entidad_id : int
+        La clave de la entidad. 0 para cifras a nivel nacional.
+
+    """
+
+    # Estos serán los años que mostraremos.
+    df = pd.read_csv("./data.csv", parse_dates=["PERIODO"], index_col=0)
+
+    # Seleccionamos los registros de la entidad especificada.
+    df = df[df["CVE_ENT"] == entidad_id]
+
+    # Extraemos el nombre de la entidad.
+    entidad = df["ENTIDAD"].iloc[0]
+
+    # Transformamos el DataFrame para que los años sean
+    # las columnas y los meses el índice.
+    df = df.pivot_table(
+        index=df.index.month, columns=df.index.year, values="PRECIPITACION"
+    )
+
+    # Limitamos a los últimos 20 años para no saturar el gráfico.
+    df = df.iloc[:, -20:]
+
+    # Preparamos nuestra escala del P5 al P95.
+    valor_max = np.nanquantile(df.values, 0.95)
+    valor_min = np.nanquantile(df.values, 0.05)
+
+    escala = np.linspace(valor_min, valor_max, 13)
+    etiquetas = [f"{item:,.1f}" for item in escala]
+
+    # Agregamos simbolos de mayor o igual y menor o igual que.
+    etiquetas[-1] = f"≥{etiquetas[-1]}"
+    etiquetas[0] = f"≤{etiquetas[0]}"
+
+    fig = go.Figure()
+
+    # Nuestro mapa de calor tendrá una escala de color personalizada.
+    # Esta irá del café para meses con poca lluvia a azul brillante para lo opuesto.
+    fig.add_trace(
+        go.Heatmap(
+            x=df.columns,
+            y=df.index,
+            z=df.values,
+            zmin=valor_min,
+            zmax=valor_max,
+            colorscale=["#51321D", "#91613C", "#07506F", "#168DB8"],
+            colorbar=dict(
+                title="Precipitación mensual acumulada (mm) | Rango P5-P95",
+                title_side="right",
+                outlinecolor="#EEEEEE",
+                outlinewidth=2,
+                ticks="outside",
+                ticklen=10,
+                tickcolor="#EEEEEE",
+                tickvals=escala,
+                ticktext=etiquetas,
+            ),
+        )
+    )
+
+    # Agregamos los textos para cada celda.
+    for x in df.columns:
+        for y in df.index:
+            # Extraemos el valor de la celda.
+            # Si es valor nulo lo dejamos en blanco.
+            value = df.loc[y, x]
+            value = "" if pd.isna(value) else value
+
+            fig.add_annotation(
+                x=x + 0.12,
+                y=y - 0.4,
+                text=value,
+                font_family="Oswald",
+            )
+
+    # Vamos a dibujar nuestra propia cuadrícula.
+    # Necesitamos desfazarla para que coincida con los límites de cada celda.
+    for x in df.columns[:-1]:
+        fig.add_vline(x + 0.5, line_color="#EEEEEE")
+
+    for y in df.index[:-1]:
+        fig.add_hline(y + 0.5, line_color="#EEEEEE")
+
+    fig.update_xaxes(
+        ticks="outside",
+        ticklen=10,
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
+        linewidth=2,
+        showgrid=False,
+        showline=True,
+        mirror=True,
+        nticks=len(df.columns) + 1,
+    )
+
+    fig.update_yaxes(
+        tickvals=df.index,
+        ticktext=df.index.map(MESES_ABREVIADOS),
+        ticks="outside",
+        ticklen=10,
+        tickcolor="#EEEEEE",
+        linecolor="#EEEEEE",
+        linewidth=2,
+        showgrid=False,
+        showline=True,
+        mirror=True,
+    )
+
+    fig.update_layout(
+        showlegend=False,
+        legend_x=0.01,
+        legend_y=0.97,
+        width=1920,
+        height=1080,
+        font_family="Inter",
+        font_color="#FFFFFF",
+        font_size=24,
+        title_text=f"Evolución de la precipitación mensual en <b>{entidad.replace('Nacional', 'México')}</b> ({df.columns[0]}-{df.columns[-1]})",
+        title_x=0.5,
+        title_y=0.965,
+        margin_t=100,
+        margin_l=100,
+        margin_r=40,
+        margin_b=120,
+        title_font_size=36,
+        plot_bgcolor=PLOT_COLOR,
+        paper_bgcolor=PAPER_COLOR,
+    )
+
+    fig.add_annotation(
+        x=0.01,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="left",
+        yanchor="top",
+        text=f"Fuente: SMN ({FECHA_FUENTE})",
+    )
+
+    fig.add_annotation(
+        x=0.5,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="center",
+        yanchor="top",
+        text="Año de registro",
+    )
+
+    fig.add_annotation(
+        x=1.01,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="right",
+        yanchor="top",
+        text="🧁 @lapanquecita",
+    )
+
+    # Nombramos el archivo resultante con los parámetros de la función.
+    fig.write_image(f"./heatmap_{entidad_id}.png")
+
+
 if __name__ == "__main__":
     temperatura(0, "MEDIA")
     tabla_temperatura()
@@ -1029,3 +1197,4 @@ if __name__ == "__main__":
 
     precipitacion_anual(0)
     top_lluvia(0)
+    precipitacion_mensual(0)

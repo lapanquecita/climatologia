@@ -2,7 +2,7 @@
 
 Este repositorio contiene herramientas para analizar las tendencias de temperatura y precipitación en México a lo largo de múltiples décadas.
 
-Los datos provienen del Servicio Meteorológico Nacional (SMN), que los publica mensualmente a nivel estatal en formato PDF (de 1985 a 2025).
+Los datos provienen del Servicio Meteorológico Nacional (SMN), que los publica mensualmente a nivel estatal en formato PDF (de 1985 a 6).
 
 El propósito de este proyecto es convertir, limpiar y estructurar esos datos en un formato más accesible para su análisis y visualización.
 
@@ -26,7 +26,7 @@ Para ejecutar el proyecto completo se requieren los siguientes componentes:
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `etl.py`           | Script principal de extracción, transformación y carga (ETL). Descarga los archivos del SMN, los convierte a CSV y consolida la información en una base de datos de series de tiempo. |
 | `script.py`        | Script para generar visualizaciones de temperatura y precipitación a partir de los datos procesados.                                                                                  |
-| `data.csv`         | Base de datos consolidada con información histórica de temperatura y precipitación (1985–2025).                                                                                       |
+| `data.csv`         | Conjunto de datos consolidada con información histórica de temperatura y precipitación (1985–2026).                                                                                       |
 | `requirements.txt` | Lista de dependencias necesarias para ejecutar los scripts del proyecto.                                                                                                              |
 
 ## Análisis y visualizaciones
@@ -45,7 +45,7 @@ Esta herramienta resulta útil para observar tendencias a lo largo del tiempo.
 
 ### Meses más fríos y cálidos
 
-Tabla comparativa con los meses más fríos y más cálidos registrados en cada estado entre 1985 y 2025.
+Tabla comparativa con los meses más fríos y más cálidos registrados en cada estado entre 1985 y 2026.
 
 ![Top meses](./imgs/tabla.png)
 
@@ -66,6 +66,14 @@ Visualización de la precipitación total anual, acompañada de una línea de re
 Esta visualización puede generarse tanto a nivel nacional como por entidad federativa.
 
 ![Precipitación anual](./imgs/precipitacion_0.png)
+
+### Precipitación mensual acumulada
+
+Mapa de calor que muestra la precipitación acumulada de cada mes durante los últimos 20 años. Cada celda representa un mes y año, lo que permite identificar patrones y variaciones en la distribución de las lluvias a lo largo del tiempo.
+
+Esta visualización puede generarse tanto a nivel nacional como por entidad federativa.
+
+![Precipitación mensual](./imgs/heatmap_0.png)
 
 ### Meses más lluviosos
 
