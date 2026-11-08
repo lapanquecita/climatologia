@@ -774,7 +774,13 @@ def precipitacion_anual(entidad_id):
     )
 
     # Agregamos la línea de la mediana histórica.
-    fig.add_hline(mediana, line_width=4, line_color="#FFFFFF")
+    fig.add_hline(
+        mediana,
+        line_width=4,
+        line_color="#FFFFFF",
+        annotation_text=f"<b>Mediana histórica ({mediana:,.1f} mm)</b>",
+        annotation_position="top",
+    )
 
     fig.update_xaxes(
         range=[df.index.min() - 0.5, df.index.max() + 0.5],
@@ -826,14 +832,6 @@ def precipitacion_anual(entidad_id):
         plot_bgcolor=PLOT_COLOR,
         paper_bgcolor=PAPER_COLOR,
         annotations=[
-            dict(
-                x=0.5,
-                y=mediana * 1.025,
-                xref="paper",
-                xanchor="center",
-                yanchor="top",
-                text=f"<b>Mediana histórica ({mediana:,.1f} mm)</b>",
-            ),
             dict(
                 x=0.01,
                 y=-0.11,
@@ -1071,7 +1069,7 @@ def precipitacion_mensual(entidad_id):
             z=df.values,
             zmin=valor_min,
             zmax=valor_max,
-            colorscale=["#51321D", "#91613C", "#07506F", "#168DB8"],
+            colorscale=["#51321D", "#168DB8"],
             colorbar=dict(
                 title="Precipitación mensual acumulada (mm) | Rango P5-P95",
                 title_side="right",
