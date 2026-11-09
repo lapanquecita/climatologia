@@ -778,12 +778,11 @@ def precipitacion_anual(entidad_id):
         mediana,
         line_width=4,
         line_color="#FFFFFF",
-        annotation_text=f"<b>Mediana histórica ({mediana:,.1f} mm)</b>",
-        annotation_position="top",
+        # annotation_text=f"<b>Mediana histórica ({mediana:,.1f} mm)</b>",
+        # annotation_position="top",
     )
 
     fig.update_xaxes(
-        range=[df.index.min() - 0.5, df.index.max() + 0.5],
         ticks="outside",
         ticklen=10,
         zeroline=False,
@@ -831,35 +830,36 @@ def precipitacion_anual(entidad_id):
         title_font_size=36,
         plot_bgcolor=PLOT_COLOR,
         paper_bgcolor=PAPER_COLOR,
-        annotations=[
-            dict(
-                x=0.01,
-                y=-0.11,
-                xref="paper",
-                yref="paper",
-                xanchor="left",
-                yanchor="top",
-                text=f"Fuente: SMN ({FECHA_FUENTE})",
-            ),
-            dict(
-                x=0.5,
-                y=-0.11,
-                xref="paper",
-                yref="paper",
-                xanchor="center",
-                yanchor="top",
-                text="Año de registro",
-            ),
-            dict(
-                x=1.01,
-                y=-0.11,
-                xref="paper",
-                yref="paper",
-                xanchor="right",
-                yanchor="top",
-                text="🧁 @lapanquecita",
-            ),
-        ],
+    )
+
+    fig.add_annotation(
+        x=0.01,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="left",
+        yanchor="top",
+        text=f"Fuente: SMN ({FECHA_FUENTE})",
+    )
+
+    fig.add_annotation(
+        x=0.5,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="center",
+        yanchor="top",
+        text="Año de registro",
+    )
+
+    fig.add_annotation(
+        x=1.01,
+        y=-0.11,
+        xref="paper",
+        yref="paper",
+        xanchor="right",
+        yanchor="top",
+        text="🧁 @lapanquecita",
     )
 
     # Nombramos el archivo resultante con los parámetros de la función.
